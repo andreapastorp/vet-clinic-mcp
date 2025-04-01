@@ -1,0 +1,37 @@
+{
+  "schema": {
+    "Patient": {
+      "properties": {
+        "id": "string",
+        "name": "string",
+        "species": "string",
+        "age": "number",
+        "currentWeight": "number",
+        "weightHistory": "array(WeightRecord)",
+        "vaccinations": "array(Vaccination)",
+        "appointments": "array(Appointment)"
+      }
+    },
+    "Vaccination": {
+      "properties": {
+        "type": "string",
+        "date": "string"
+      }
+    },
+    "WeightRecord": {
+      "properties": {
+        "weight": "number",
+        "date": "string",
+        "notes": "string"
+      }
+    },
+    "Appointment": {
+      "properties": {
+        "type": "string",
+        "date": "string",
+        "notes": "string",
+        "completed": "boolean"
+      }
+    }
+  }
+}
