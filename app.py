@@ -44,24 +44,12 @@ def prepare_context():
         "data": sample_data
     }
 
-# Initialize Anthropic client with minimal parameters
-anthropic_client = None
-try:
-    anthropic_client = Anthropic(api_key=Config.ANTHROPIC_API_KEY)
-except Exception as e:
-    logger.error(f"Failed to initialize Anthropic client: {e}")
-
+# Initialize Anthropic client
+anthropic_client = Anthropic(api_key=Config.ANTHROPIC_API_KEY)
 
 @app.route('/ask', methods=['POST'])
 def ask_claude():
     """Handle queries to Claude using Model Context Protocol"""
-    
-    # Check if client is initialized
-    if not anthropic_client:
-        return jsonify({
-            "message": "Anthropic client not initialized. Check API key and logs."
-        }), 500
-    
     try:
         # Get user message
         user_message = request.json.get('message', '')
@@ -127,9 +115,6 @@ def index():
     return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
-    # Validate configuration
-    Config.validate()
-    
     # Run the app
     app.run(
         host=Config.HOST, 
