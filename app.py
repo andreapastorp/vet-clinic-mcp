@@ -51,8 +51,11 @@ try:
 except Exception as e:
     logger.error(f"Failed to initialize Anthropic client: {e}")
 
+
 @app.route('/ask', methods=['POST'])
 def ask_claude():
+    """Handle queries to Claude using Model Context Protocol"""
+    
     # Check if client is initialized
     if not anthropic_client:
         return jsonify({
@@ -66,27 +69,43 @@ def ask_claude():
         # Prepare context
         context = prepare_context()
         
-        # Prepare system prompt with context
+        # Keep system prompt focused on instructions, not data
         system_prompt = (
             "You are a veterinary assistant helping to retrieve patient information. "
-            "Use the following context to answer questions precisely:\n\n"
-            f"Schema: {json.dumps(context['schema'])}\n\n"
-            f"Data: {json.dumps(context['data'])}\n\n"
-            "Guidelines:\n"
-            "- Directly answer questions about patient records\n"
-            "- If information is not found, clearly state that\n"
-            "- Provide concise and helpful responses"
+            "Provide concise and helpful responses about the patient data."
         )
         
-        # Send message to Claude with new API approach
+        # Pure MCP implementation with proper document formatting
         response = anthropic_client.messages.create(
             model="claude-3-haiku-20240307",
             max_tokens=300,
-            system=system_prompt,  # Use top-level system parameter
+            system=system_prompt,
             messages=[
                 {
                     "role": "user",
-                    "content": user_message
+                    "content": [
+                        {"type": "text", "text": user_message},
+                        # Document 1: Patient data
+                        {
+                            "type": "document", 
+                            "title": "patient_data.json",
+                            "source": {
+                                "type": "text", 
+                                "media_type": "text/plain",
+                                "data": json.dumps(context["data"])
+                            }
+                        },
+                        # Document 2: Schema
+                        {
+                            "type": "document", 
+                            "title": "schema.json",
+                            "source": {
+                                "type": "text", 
+                                "media_type": "text/plain",
+                                "data": json.dumps(context["schema"])
+                            }
+                        }
+                    ]
                 }
             ]
         )
