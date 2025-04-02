@@ -5,33 +5,35 @@
         "id": "string",
         "name": "string",
         "species": "string",
-        "age": "number",
-        "currentWeight": "number",
+        "breed": "string",
+        "gender": "string",
+        "birthDate": "string",
+        "microchipNumber": "string",
+        "appointments": "array(Appointment)",
         "weightHistory": "array(WeightRecord)",
-        "vaccinations": "array(Vaccination)",
-        "appointments": "array(Appointment)"
+        "vaccinations": "array(Vaccination)"
       }
     },
-    "Vaccination": {
+    "Appointment": {
       "properties": {
-        "type": "string",
-        "date": "string"
+        "date": "string",
+        "status": "string",
+        "notes": "string",
+        "appointmentType": "string"
       }
     },
     "WeightRecord": {
       "properties": {
         "weight": "number",
         "date": "string",
-        "notes": "string"
+        "note": "string"
       }
     },
-    "Appointment": {
+    "Vaccination": {
       "properties": {
         "type": "string",
         "date": "string",
-        "notes": "string",
-        "completed": "boolean"
+        "expirationDate": "string"
       }
     }
   }
-}
