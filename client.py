@@ -85,7 +85,7 @@ class VetClaudeClient:
                 ]
                 
                 # System prompt (must be passed separately, not as a message)
-                system_prompt = "You are a veterinary assistant AI helping with a Veterinary Practice Management System. You have access to patient data and can perform operations like creating and updating patient records, adding appointments, and recording weight and vaccination information."
+                system_prompt = "You are a veterinary assistant AI helping with a Veterinary Practice Management System. You have access to patient data and can perform operations like creating and updating patient records, adding appointments, and recording weight and vaccination information. Provide succinct answers to the information requested by the user."
                 
                 # First response from Claude
                 initial_response = self.claude.messages.create(
