@@ -4,6 +4,7 @@ import subprocess
 import threading
 from flask import Flask, request, jsonify, send_from_directory
 import asyncio
+from flask_cors import CORS
 from dotenv import load_dotenv
 
 # Import MCP client functionality
@@ -17,6 +18,9 @@ app = Flask(__name__,
     static_folder='dist',
     static_url_path=''
 )
+
+# Enable CORS
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # MCP server process
 mcp_server_process = None
@@ -38,9 +42,10 @@ def start_mcp_server():
 start_mcp_server()
 
 # API Routes
-@app.route('/api/chat', methods=['POST'])
+@app.route('/chat', methods=['POST'])
 def chat():
     """Process chat messages through MCP."""
+    print("Received chat request")
     data = request.json
     message = data.get('message', '')
     
@@ -49,13 +54,16 @@ def chat():
     asyncio.set_event_loop(loop)
     
     try:
-        # Call your existing MCP client function
+        # Call existing MCP client function
         result = loop.run_until_complete(process_message(message))
         return jsonify(result)
+    except Exception as e:
+        print(f"Error in chat endpoint: {str(e)}")
+        return jsonify({"error": str(e)}), 500
     finally:
         loop.close()
 
-@app.route('/api/patients', methods=['GET'])
+@app.route('/patients', methods=['GET'])
 def get_patients():
     """Get all patients data."""
     loop = asyncio.new_event_loop()
@@ -67,7 +75,7 @@ def get_patients():
     finally:
         loop.close()
 
-@app.route('/api/patients/<patient_id>', methods=['GET'])
+@app.route('/patients/<patient_id>', methods=['GET'])
 def get_patient(patient_id):
     """Get details for a specific patient."""
     loop = asyncio.new_event_loop()
@@ -79,7 +87,7 @@ def get_patient(patient_id):
     finally:
         loop.close()
 
-@app.route('/api/patients', methods=['POST'])
+@app.route('/patients', methods=['POST'])
 def create_new_patient():
     """Create a new patient."""
     data = request.json
@@ -102,4 +110,4 @@ def serve(path):
         return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
