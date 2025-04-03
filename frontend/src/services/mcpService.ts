@@ -56,6 +56,10 @@ async function apiCall<T>(endpoint: string, method = 'GET', data: any = null): P
     options.body = JSON.stringify(data);
   }
 
+  // Build the full URL with the /api prefix
+  const url = `${API_BASE_URL}${endpoint}`;
+  console.log(`Making API request to: ${url}`); // Add this for debugging
+
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
     
