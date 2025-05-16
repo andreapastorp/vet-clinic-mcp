@@ -26,15 +26,26 @@ Vibes only, do not try in production.
    source venv/bin/activate
    pip install -r requirements.txt
    ```
+3. Configure the environment variables in `.env`:
+```
+ANTHROPIC_API_KEY={api_key}
 
-3. Build the React application
+# Database settings
+DB_PATH=vet_clinic.db
+
+# Flask
+FLASK_ENV=development
+FLASK_DEBUG=1
+```
+
+4. Build the React application
    ```
    cd frontend
    npm install
    npm run build
    ```
 
-4. Initialize the database:
+5. Initialize the database:
    ```
    python init.py
    ```
