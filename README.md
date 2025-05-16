@@ -27,13 +27,33 @@ Vibes only, do not try in production.
    pip install -r requirements.txt
    ```
 
-3. Initialize the database:
+3. Build the React application
+   ```
+   cd frontend
+   npm install
+   npm run build
+   ```
+
+4. Initialize the database:
    ```
    python init.py
    ```
 
 ## Running the Server
 
+To run the mcp server in the terminal:
 ```
+cd backend
 python client.py
+```
+
+Alternatively, run the mcp server with the UI:
+1. Run npm
+```
+cd frontend
+npm run dev
+```
+2. Run the app
+```
+python app.py
 ```
